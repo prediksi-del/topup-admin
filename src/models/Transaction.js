@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const TransactionSchema = new mongoose.Schema({
-    orderId: { type: String, required: true, unique: true },
-    userId: { type: String, required: true }, // Terhubung ke Firebase UID
+    orderId: { type: String, required: true, unique: true, index: true },
+    userId: { type: String, required: true },
     amount: { type: Number, required: true },
     walletType: { type: String, enum: ['DANA', 'OVO', 'GOPAY'], required: true },
     phoneNumber: { type: String, required: true },
@@ -12,4 +12,4 @@ const TransactionSchema = new mongoose.Schema({
     rawMidtransResponse: { type: Object }
 });
 
-module.exports = mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema);
+export default mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema);
