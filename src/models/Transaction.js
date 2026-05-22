@@ -1,18 +1,15 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
-  orderId: { type: String, required: true, unique: true, index: true },
-  type: { type: String, enum: ['topup', 'withdraw'], required: true },
-  amount: { type: Number, required: true, min: 1 },
-  status: { type: String, enum: ['pending', 'success', 'failed', 'expired'], default: 'pending', index: true },
-  paymentType: { type: String },
-  snapToken: { type: String },
-  bankDetails: {
-    bankName: String,
-    accountNumber: String,
-    accountName: String
-  }
-}, { timestamps: true });
+    orderId: { type: String, required: true, unique: true },
+    userId: { type: String, required: true }, // Terhubung ke Firebase UID
+    amount: { type: Number, required: true },
+    walletType: { type: String, enum: ['DANA', 'OVO', 'GOPAY'], required: true },
+    phoneNumber: { type: String, required: true },
+    status: { type: String, enum: ['PENDING', 'SUCCESS', 'FAILED'], default: 'PENDING' },
+    createdAt: { type: Date, default: Date.now },
+    paidAt: { type: Date },
+    rawMidtransResponse: { type: Object }
+});
 
-export default mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema);
+module.exports = mongoose.models.Transaction || mongoose.model('Transaction', TransactionSchema);
