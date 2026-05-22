@@ -8,7 +8,6 @@ const connectDB = async () => {
     }
 
     try {
-        // Optimasi pooling khusus untuk serverless environment
         const db = await mongoose.connect(process.env.MONGODB_URI, {
             maxPoolSize: 10, 
             serverSelectionTimeoutMS: 5000,
