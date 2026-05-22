@@ -10,21 +10,19 @@ class MidtransService {
             }
         };
 
-        // Mengarahkan alur payload spesifik ke masing-masing provider e-wallet murni
         if (type === 'gopay') {
             parameter.payment_type = "gopay";
             parameter.gopay = {
-                "enable_callback": true, // Mengaktifkan deep-link balik ke aplikasi setelah bayar
+                "enable_callback": true,
                 "callback_url": "https://topup-admin-nine.vercel.app/payment-status"
             };
         } else if (type === 'ovo') {
             parameter.payment_type = "ovo";
             parameter.ovo = {
-                "phone_number": phoneNumber // Memicu Push Notification PIN langsung ke HP user
+                "phone_number": phoneNumber
             };
         } else if (type === 'dana') {
             parameter.payment_type = "dana";
-            // DANA murni menghasilkan token redirect menuju halaman sistem DANA tanpa QRIS
         } else {
             throw new Error('Metode e-wallet tidak didukung. Gunakan OVO, DANA, atau GOPAY.');
         }
