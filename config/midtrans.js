@@ -1,4 +1,4 @@
-const midtransClient = require('midtrans-client');
+import midtransClient from 'midtrans-client';
 
 const coreApi = new midtransClient.CoreApi({
     isProduction: process.env.MIDTRANS_IS_PRODUCTION === 'true',
@@ -6,4 +6,4 @@ const coreApi = new midtransClient.CoreApi({
     clientKey: process.env.MIDTRANS_CLIENT_KEY
 });
 
-module.exports = coreApi;
+export default coreApi;
