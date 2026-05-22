@@ -1,10 +1,9 @@
-const connectDB = require('../../config/db');
-const Transaction = require('../../src/models/Transaction');
-const User = require('../../src/models/User');
-const coreApi = require('../../config/midtrans');
+import connectDB from '../../config/db.js';
+import Transaction from '../../src/models/Transaction.js';
+import User from '../../src/models/User.js';
+import coreApi from '../../config/midtrans.js';
 
-// Ganti dari "export default async function" menjadi "module.exports ="
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
@@ -77,4 +76,4 @@ module.exports = async (req, res) => {
         console.error('✗ Webhook Processing Error:', error.message);
         return res.status(500).send('Internal Server Error');
     }
-};
+}
