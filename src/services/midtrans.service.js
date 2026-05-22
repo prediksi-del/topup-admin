@@ -1,56 +1,39 @@
 const coreApi = require('../../config/midtrans');
 
 class MidtransService {
-    async chargeEwallet({ orderId, amount, walletType, phoneNumber, userEmail }) {
-        let paymentType = '';
-        let ewalletDetails = {};
-
-        // Normalisasi input walletType ke huruf kecil
+    async chargeEwallet({ orderId, amount, walletType, phoneNumber }) {
         const type = walletType.toLowerCase();
-
-        if (type === 'ovo') {
-            paymentType = 'gopay'; // Midtrans memproses OVO & Gopay via core e-wallet channel tertentu
-            ewalletDetails = {
-                enable_callback: true,
-                callback_url: "https://your-app.vercel.app/payment-status"
-            };
-        } else if (type === 'dana') {
-            paymentType = 'danamon_online'; // Atau sesuaikan dengan tipe direct contract DANA Midtrans kamu
-        } else if (type === 'gopay') {
-            paymentType = 'gopay';
-            ewalletDetails = {
-                enable_callback: true,
-                callback_url: "https://your-app.vercel.app/payment-status"
-            };
-        } else {
-            throw new Error('Metode e-wallet tidak didukung. Gunakan ovo, dana, atau gopay.');
-        }
-
-        const parameter = {
-            "payment_type": paymentType,
+        let parameter = {
             "transaction_details": {
                 "order_id": orderId,
                 "gross_amount": Number(amount)
-            },
-            "customer_details": {
-                "email": userEmail || "customer@email.com",
-                "phone": phoneNumber
             }
         };
 
-        // Jika OVO, Midtrans membutuhkan data spesifik nomor HP di dalam objek gopay/ovo_details
-        if (type === 'ovo') {
+        // Mengarahkan alur payload spesifik ke masing-masing provider e-wallet murni
+        if (type === 'gopay') {
+            parameter.payment_type = "gopay";
             parameter.gopay = {
-                "enable_callback": true
+                "enable_callback": true, // Mengaktifkan deep-link balik ke aplikasi setelah bayar
+                "callback_url": "https://topup-admin-nine.vercel.app/payment-status"
             };
-            // Catatan: Jika menggunakan direct contract OVO murni, sesuaikan key objek ke "ovo_details"
+        } else if (type === 'ovo') {
+            parameter.payment_type = "ovo";
+            parameter.ovo = {
+                "phone_number": phoneNumber // Memicu Push Notification PIN langsung ke HP user
+            };
+        } else if (type === 'dana') {
+            parameter.payment_type = "dana";
+            // DANA murni menghasilkan token redirect menuju halaman sistem DANA tanpa QRIS
+        } else {
+            throw new Error('Metode e-wallet tidak didukung. Gunakan OVO, DANA, atau GOPAY.');
         }
 
         try {
             const transaction = await coreApi.charge(parameter);
             return transaction;
         } catch (error) {
-            throw new Error(`Midtrans Charge Error: ${error.message}`);
+            throw new Error(`Midtrans Core API Error: ${error.message}`);
         }
     }
 }
