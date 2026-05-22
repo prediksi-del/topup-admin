@@ -1,12 +1,16 @@
 {
   "name": "topup-admin-vercel",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Topup Admin Serverless API with Direct E-Wallet Gateway",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev"
+  },
   "dependencies": {
-    "crypto": "^1.0.1",
-    "firebase-admin": "^12.0.0",
-    "joi": "^17.12.2",
+    "dotenv": "^16.4.5",
+    "firebase-admin": "^12.1.0",
+    "joi": "^17.13.1",
     "midtrans-client": "^1.3.1",
-    "mongoose": "^8.2.0"
+    "mongoose": "^8.4.0"
   }
 }
