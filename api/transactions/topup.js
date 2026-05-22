@@ -1,40 +1,53 @@
-import { connectDB } from '../../config/db.js';
-import { snap } from '../../config/midtrans.js';
-import { verifyFirebaseToken } from '../../src/middlewares/firebaseAuth.middleware.js';
-import { validatePayload, schemas } from '../../src/middlewares/validate.middleware.js';
-import Transaction from '../../src/models/Transaction.js';
+const connectDB = require('../../config/db');
+const Transaction = require('../../src/models/Transaction');
+const midtransService = require('../../src/services/midtrans.service');
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).end();
+    if (req.method !== 'POST') {
+        return res.status(405).json({ message: 'Method Not Allowed' });
+    }
 
-  const user = await verifyFirebaseToken(req, res, 'user');
-  if (!user) return;
+    const { amount, walletType, phoneNumber, userEmail, userId } = req.body;
 
-  const cleanBody = validatePayload(req.body, schemas.topup, res);
-  if (!cleanBody) return;
+    if (!amount || !walletType || !phoneNumber || !userId) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
 
-  await connectDB();
-  const orderId = `TP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    try {
+        // 1. Pastikan database terkoneksi (Serverless re-use connection)
+        await connectDB();
 
-  try {
-    const parameter = {
-      transaction_details: { order_id: orderId, gross_amount: cleanBody.amount },
-      customer_details: { first_name: user.name, email: user.email }
-    };
+        const orderId = `TOPUP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    const midtransTx = await snap.createTransaction(parameter);
+        // 2. Tembak layanan Midtrans Core API
+        const midtransResponse = await midtransService.chargeEwallet({
+            orderId, amount, walletType, phoneNumber, userEmail
+        });
 
-    const tx = await Transaction.create({
-      userId: user._id,
-      orderId,
-      type: 'topup',
-      amount: cleanBody.amount,
-      status: 'pending',
-      snapToken: midtransTx.token
-    });
+        // 3. Simpan data transaksi ke MongoDB dengan status PENDING
+        const newTransaction = new Transaction({
+            orderId,
+            userId,
+            amount: Number(amount),
+            walletType: walletType.toUpperCase(),
+            phoneNumber,
+            status: 'PENDING',
+            rawMidtransResponse: midtransResponse
+        });
+        await newTransaction.save();
 
-    return res.status(201).json({ redirect_url: midtransTx.redirect_url, token: midtransTx.token, tx });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
+        // 4. Kembalikan respon berisi aksi lanjutan (Deep link aplikasi / Push Info)
+        return res.status(200).json({
+            success: true,
+            orderId,
+            status: 'PENDING',
+            // Ambil redirect URL / Deeplink untuk DANA/Gopay dari actions Midtrans jika ada
+            actions: midtransResponse.actions || null, 
+            message: `Permintaan topup ${walletType} berhasil dibuat.`
+        });
+
+    } catch (error) {
+        console.error('Topup Serverless Error:', error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
 }
