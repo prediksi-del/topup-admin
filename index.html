@@ -3,117 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJM Control Panel - Direct DANA Merchant</title>
+    <title>AJM Control Panel - Premium Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dana: '#108EE9',
+                            gopay: '#00AED6',
+                            ovo: '#4C2A86'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Desain Scrollbar Kustom untuk Log Notifikasi */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+        
+        /* Efek Animasi Fade In untuk Perpindahan Tab */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 antialiased selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 antialiased selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
 
-    <div class="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 shadow-2xl shadow-slate-950/50">
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 mb-3 border border-indigo-500/20 shadow-inner">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75" />
-                </svg>
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+    <div class="absolute bottom-1/4 left-1/3 w-[300px] h-[300px] bg-sky-500/10 rounded-full blur-[100px] pointer-events-none z-0"></div>
+
+    <div class="w-full max-w-lg bg-slate-900/40 backdrop-blur-2xl border border-slate-800/80 rounded-3xl p-6 shadow-2xl shadow-slate-950/80 z-10 relative">
+        
+        <div id="sectionLogin" class="space-y-6 fade-in">
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-indigo-500/5 text-indigo-400 mb-4 border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-black tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">AJM CONTROL PANEL</h1>
+                <p class="text-xs text-slate-400 mt-1.5">Gerbang Sistem Otomatisasi & Manajemen Transaksi</p>
             </div>
-            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">AJM Control Panel</h1>
-            <p class="text-xs text-slate-400 mt-1">Gerbang Pembayaran Direct DANA Merchant API</p>
+
+            <form id="loginForm" class="space-y-4 pt-2">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Email Administrator</label>
+                    <input type="email" id="loginEmail" value="admin@ajmproject.com" required 
+                        class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-300 placeholder-slate-600 shadow-inner">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Password Keamanan</label>
+                    <input type="password" id="loginPassword" value="password123" required 
+                        class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-300 placeholder-slate-600 shadow-inner">
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white py-3.5 rounded-xl font-semibold text-sm shadow-xl shadow-indigo-600/20 active:scale-[0.99] transition duration-150 mt-2">
+                    Masuk ke Dashboard
+                </button>
+            </form>
         </div>
 
-        <form id="topupForm" class="space-y-5">
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">User ID (Firebase UID)</label>
-                <input type="text" id="userId" value="user_demo_123" required
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200">
+        <div id="sectionDashboard" class="hidden space-y-6 fade-in">
+            <div class="flex items-center justify-between border-b border-slate-800/60 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-sm text-white shadow-md shadow-indigo-600/30 border border-indigo-400/20">
+                        AJM
+                    </div>
+                    <div>
+                        <h2 class="text-[10px] font-bold uppercase tracking-widest text-indigo-400">Sistem Aktif</h2>
+                        <h1 class="text-sm font-bold text-white tracking-wide">Administrator Utama</h1>
+                    </div>
+                </div>
+                <button onclick="logout()" class="text-xs px-3 py-2 bg-slate-950 hover:bg-rose-950/30 border border-slate-800 hover:border-rose-500/30 text-slate-400 hover:text-rose-400 rounded-xl transition duration-200 font-medium">
+                    Keluar
+                </button>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Metode Pembayaran</label>
-                <div class="p-3 bg-slate-950 border border-indigo-500/50 rounded-xl flex items-center justify-between">
-                    <span class="text-sm font-bold text-sky-400">DANA Bisnis</span>
-                    <span class="text-[10px] bg-sky-500/10 text-sky-400 px-2 py-0.5 rounded-md font-semibold border border-sky-500/20">DIRECT API</span>
+            <div class="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-950 to-indigo-950/40 border border-slate-800 rounded-2xl p-5 flex items-center justify-between shadow-2xl shadow-indigo-950/10">
+                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-sky-500/5 rounded-full blur-xl pointer-events-none"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                        Total Kas Merchant DANA
+                    </p>
+                    <h3 id="txtSaldo" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-sky-200 to-white font-mono mt-2 tracking-tight">Rp 2.450.000</h3>
+                </div>
+                <div class="p-3.5 bg-sky-500/10 rounded-xl text-sky-400 border border-sky-500/20 shadow-inner relative z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12m18 0V9a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9v3m14.25-3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                    </svg>
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nomor Telepon Akun DANA</label>
-                <input type="tel" id="phoneNumber" placeholder="Contoh: 0812xxxxxxxx" required
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200">
+            <div class="grid grid-cols-3 gap-1 bg-slate-950 p-1.5 rounded-xl border border-slate-800/80 shadow-inner">
+                <button id="tabTopup" onclick="switchTab('topup')" class="py-2.5 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-md shadow-indigo-600/10 transition duration-200">Top Up</button>
+                <button id="tabWithdraw" onclick="switchTab('withdraw')" class="py-2.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 transition duration-200">Withdraw</button>
+                <button id="tabNotif" onclick="switchTab('notif')" class="py-2.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 relative transition duration-200">
+                    Notifikasi <span class="absolute top-2 right-3 w-1.5 h-1.5 bg-amber-500 rounded-full shadow-lg shadow-amber-500/50"></span>
+                </button>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nominal Top Up (Rp)</label>
-                <input type="number" id="amount" placeholder="Minimal 10000" min="10000" required
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm font-mono text-indigo-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200">
+            <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 shadow-inner">
+                
+                <div id="paneTopup" class="space-y-4 fade-in">
+                    <div class="flex items-center gap-2 border-b border-slate-900 pb-2 mb-1">
+                        <span class="w-1 h-3.5 bg-indigo-500 rounded-full"></span>
+                        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Inisiasi Tiket Top Up DANA</h3>
+                    </div>
+                    <form id="topupForm" class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1.5">Target User ID (Firebase UID)</label>
+                            <input type="text" id="topupUserId" value="user_demo_123" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1.5">Nomor Akun DANA Tujuan</label>
+                            <input type="tel" id="topupPhone" placeholder="Contoh: 0812xxxxxxxx" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1.5">Nominal Pengisian (Rp)</label>
+                            <input type="number" id="topupAmount" placeholder="Minimal Rp 10.000" min="10000" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 text-indigo-300 font-mono font-bold tracking-wide transition">
+                        </div>
+                        <button type="submit" id="btnTopupSubmit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 py-3 rounded-xl font-bold text-xs shadow-md shadow-indigo-900/20 transition duration-150 mt-1 active:scale-[0.99]">
+                            Kirim Permintaan ke API DANA
+                        </button>
+                    </form>
+                    
+                    <div id="resultArea" class="p-3 rounded-xl border text-[11px] hidden flex flex-col gap-2">
+                        <p id="resultMessage" class="leading-relaxed"></p>
+                        <a id="actionLink" href="#" target="_blank" class="w-full py-2.5 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600 text-white font-bold rounded-xl text-center hidden shadow-md shadow-sky-600/20 transition duration-150 active:scale-[0.99]">
+                            Buka Tautan Pembayaran DANA &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <div id="paneWithdraw" class="space-y-4 hidden fade-in">
+                    <div class="flex items-center gap-2 border-b border-slate-900 pb-2 mb-1">
+                        <span class="w-1 h-3.5 bg-emerald-500 rounded-full"></span>
+                        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Penarikan Dana Merchant</h3>
+                    </div>
+                    <form id="withdrawForm" class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1.5">Bank / Dompet Digital Tujuan</label>
+                            <select id="wdBank" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-emerald-500 text-slate-300 transition">
+                                <option value="BCA">Bank Central Asia (BCA)</option>
+                                <option value="BRI">Bank Rakyat Indonesia (BRI)</option>
+                                <option value="MANDIRI">Bank Mandiri</option>
+                                <option value="GOPAY">GoPay Korporat</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1.5">Nomor Rekening Penerima</label>
+                            <input type="text" id="wdAccount" placeholder="Masukkan nomor rekening valid" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-emerald-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1.5">Jumlah Penarikan Saldo (Rp)</label>
+                            <input type="number" id="wdAmount" placeholder="Sesuaikan batas saldo kas" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-emerald-500 text-emerald-300 font-mono font-bold tracking-wide transition">
+                        </div>
+                        <button type="submit" id="btnWdSubmit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 py-3 rounded-xl font-bold text-xs shadow-md shadow-emerald-900/20 transition duration-150 mt-1 active:scale-[0.99]">
+                            Proses Penarikan Dana Berjalan
+                        </button>
+                    </form>
+                </div>
+
+                <div id="paneNotif" class="space-y-4 hidden fade-in">
+                    <div class="flex items-center gap-2 border-b border-slate-900 pb-2 mb-1">
+                        <span class="w-1 h-3.5 bg-amber-500 rounded-full"></span>
+                        <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Log Riwayat Webhook Sistem</h3>
+                    </div>
+                    <div class="space-y-2 max-h-52 overflow-y-auto pr-1" id="logNotifikasi">
+                        <div class="p-3 bg-slate-950/80 border border-slate-800/60 rounded-xl flex justify-between items-start text-[11px]">
+                            <div>
+                                <p class="font-bold text-emerald-400">DANA_CALLBACK: PAID</p>
+                                <p class="text-slate-400 mt-0.5">Order: AJM-1716422340 (UID: user_demo_123)</p>
+                            </div>
+                            <span class="text-[9px] text-slate-500 font-mono bg-slate-900 px-1.5 py-0.5 rounded-md border border-slate-800/50">Baru saja</span>
+                        </div>
+                        <div class="p-3 bg-slate-950/80 border border-slate-800/60 rounded-xl flex justify-between items-start text-[11px]">
+                            <div>
+                                <p class="font-bold text-indigo-400">SYSTEM: INIT_TOPUP</p>
+                                <p class="text-slate-400 mt-0.5">Berhasil melakukan hit API penagihan dana bisnis.</p>
+                            </div>
+                            <span class="text-[9px] text-slate-500 font-mono bg-slate-900 px-1.5 py-0.5 rounded-md border border-slate-800/50">5 mnt lalu</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
-            <button type="submit" id="btnSubmit"
-                class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition duration-150">
-                Bayar Sekarang (Direct DANA)
-            </button>
-        </form>
-
-        <div id="resultArea" class="mt-6 p-4 rounded-xl border text-xs hidden">
-            <p id="resultMessage" class="font-medium mb-3"></p>
-            <a id="actionLink" href="#" target="_blank" 
-               class="inline-flex items-center justify-center w-full px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition duration-150 text-center shadow-lg shadow-sky-600/20">
-               Lanjutkan ke Aplikasi DANA &rarr;
-            </a>
         </div>
+
     </div>
 
-    <script>
-        const form = document.getElementById('topupForm');
-        const resultArea = document.getElementById('resultArea');
-        const resultMessage = document.getElementById('resultMessage');
-        const actionLink = document.getElementById('actionLink');
-        const btnSubmit = document.getElementById('btnSubmit');
+<script>
+    // Penampung Elemen DOM Halaman
+    const secLogin = document.getElementById('sectionLogin');
+    const secDashboard = document.getElementById('sectionDashboard');
+    const loginForm = document.getElementById('loginForm');
+    const txtSaldo = document.getElementById('txtSaldo');
+    
+    const panes = {
+        topup: document.getElementById('paneTopup'),
+        withdraw: document.getElementById('paneWithdraw'),
+        notif: document.getElementById('paneNotif')
+    };
+    const tabs = {
+        topup: document.getElementById('tabTopup'),
+        withdraw: document.getElementById('tabWithdraw'),
+        notif: document.getElementById('tabNotif')
+    };
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = 'Menghubungi Server DANA...';
-            resultArea.classList.add('hidden');
-            actionLink.classList.add('hidden');
+    // ================= FUNGSI 1: AUTENTIKASI LOGIN ADMIN ASLI =================
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
 
-            const payload = {
-                userId: document.getElementById('userId').value,
-                phoneNumber: document.getElementById('phoneNumber').value,
-                amount: document.getElementById('amount').value
-            };
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
 
-            try {
-                const response = await fetch('/api/transactions/topup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+            if (data.success) {
+                secLogin.classList.add('hidden');
+                secDashboard.classList.remove('hidden');
+                
+                // Panggil fungsi penarik data live setelah login sukses
+                getLiveMerchantBalance();
+                pushNotification('SECURITY', `Sesi akses Admin (${data.admin.email}) berhasil diverifikasi database.`, 'indigo');
+            } else {
+                alert("Gagal Masuk: " + data.message);
+            }
+        } catch (err) {
+            alert("Koneksi gagal menghubungi API Auth.");
+        }
+    });
 
-                const data = await response.json();
-                resultArea.classList.remove('hidden');
+    function logout() {
+        secDashboard.classList.add('hidden');
+        secLogin.classList.remove('hidden');
+    }
 
-                if (data.success) {
-                    resultArea.className = "mt-6 p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-xs";
-                    resultMessage.innerText = data.message;
+    // ================= FUNGSI 2: PENGAMBILAN SALDO LIVE DANA MERCHANT =================
+    async function getLiveMerchantBalance() {
+        try {
+            txtSaldo.innerText = "Memuat Saldo...";
+            const res = await fetch('/api/merchant/balance');
+            const data = await res.json();
+            if (data.success) {
+                // Format angka respons ke dalam rupiah standar Indonesia
+                txtSaldo.innerText = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(data.balance);
+                pushNotification('DANA_API', 'Sinkronisasi kas merchant DANA berhasil diperbarui.', 'emerald');
+            } else {
+                txtSaldo.innerText = "Gagal Memuat";
+            }
+        } catch (err) {
+            txtSaldo.innerText = "Koneksi Error";
+        }
+    }
 
-                    if (data.payment && data.payment.actionUrl) {
-                        actionLink.href = data.payment.actionUrl;
-                        actionLink.classList.remove('hidden');
-                    }
-                } else {
-                    resultArea.className = "mt-6 p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-xs";
-                    resultMessage.innerText = "Error API: " + data.message;
-                }
-            } catch (err) {
-                resultArea.classList.remove('hidden');
-                resultArea.className = "mt-6 p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-xs";
-                resultMessage.innerText = "Gagal terhubung ke cluster backend Vercel API.";
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = 'Bayar Sekarang (Direct DANA)';
+    // Navigasi Tab SPA Menu Kontrol
+    function switchTab(activeTab) {
+        Object.keys(panes).forEach(key => {
+            if (key === activeTab) {
+                panes[key].classList.remove('hidden');
+                tabs[key].className = "py-2.5 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-md shadow-indigo-600/10 transition duration-200";
+                // Jika membuka tab notifikasi / log, atau refresh saldo
+                if(key === 'topup' || key === 'withdraw') getLiveMerchantBalance();
+            } else {
+                panes[key].classList.add('hidden');
+                tabs[key].className = "py-2.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-slate-200 transition duration-200";
             }
         });
-    </script>
+    }
+
+    // Fungsi Pengisi Log Webhook Notifikasi
+    function pushNotification(title, message, type = 'indigo') {
+        const container = document.getElementById('logNotifikasi');
+        const colorClass = type === 'emerald' ? 'text-emerald-400' : (type === 'rose' ? 'text-rose-400' : 'text-indigo-400');
+        
+        const item = document.createElement('div');
+        item.className = "p-3 bg-slate-950/80 border border-slate-800/60 rounded-xl flex justify-between items-start text-[11px] fade-in";
+        item.innerHTML = `
+            <div>
+                <p class="font-bold ${colorClass}">${title}</p>
+                <p class="text-slate-400 mt-0.5">${message}</p>
+            </div>
+            <span class="text-[9px] text-slate-500 font-mono bg-slate-900 px-1.5 py-0.5 rounded-md border border-slate-800/50">Baru saja</span>
+        `;
+        container.insertBefore(item, container.firstChild);
+    }
+
+    // ================= FUNGSI 3: KIRIM INTI TOP UP VIA SERVER DANA =================
+    const topupForm = document.getElementById('topupForm');
+    const resultArea = document.getElementById('resultArea');
+    const resultMessage = document.getElementById('resultMessage');
+    const actionLink = document.getElementById('actionLink');
+    const btnTopupSubmit = document.getElementById('btnTopupSubmit');
+
+    topupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btnTopupSubmit.disabled = true;
+        btnTopupSubmit.innerText = 'Memproses API Merchant DANA...';
+        resultArea.classList.add('hidden');
+        actionLink.classList.add('hidden');
+
+        const payload = {
+            userId: document.getElementById('topupUserId').value,
+            phoneNumber: document.getElementById('topupPhone').value,
+            amount: document.getElementById('topupAmount').value
+        };
+
+        try {
+            const response = await fetch('/api/transactions/topup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            resultArea.classList.remove('hidden');
+
+            if (data.success) {
+                resultArea.className = "p-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[11px] fade-in";
+                resultMessage.innerText = data.message;
+                pushNotification('DANA_INIT', `Invoice keluar terbit untuk nomor ${payload.phoneNumber} senilai Rp ${payload.amount}`, 'emerald');
+
+                if (data.payment && data.payment.actionUrl) {
+                    actionLink.href = data.payment.actionUrl;
+                    actionLink.classList.remove('hidden');
+                }
+            } else {
+                resultArea.className = "p-3 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-[11px] fade-in";
+                resultMessage.innerText = "API DANA Error: " + data.message;
+            }
+        } catch (err) {
+            resultArea.className = "p-3 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-[11px] fade-in";
+            resultMessage.innerText = "Koneksi terputus ke rute gateway serverless.";
+        } finally {
+            btnTopupSubmit.disabled = false;
+            btnTopupSubmit.innerText = 'Kirim Permintaan ke API DANA';
+        }
+    });
+
+    // ================= FUNGSI 4: AKSI WITHDRAW DATA ASLI VIA DANA DISBURSEMENT =================
+    const withdrawForm = document.getElementById('withdrawForm');
+    const btnWdSubmit = document.getElementById('btnWdSubmit');
+
+    withdrawForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btnWdSubmit.innerText = 'Mengirimkan Kas Keluar...';
+        btnWdSubmit.disabled = true;
+
+        const payload = {
+            bankCode: document.getElementById('wdBank').value,
+            accountNo: document.getElementById('wdAccount').value,
+            amount: document.getElementById('wdAmount').value
+        };
+
+        try {
+            const res = await fetch('/api/transactions/withdraw', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                alert(`Pencairan kas sebesar Rp ${payload.amount} menuju rekening ${payload.bankCode} berhasil dieksekusi.`);
+                pushNotification('CASH_OUT', `Transfer B2C sukses dikirimkan ke VA/Rekening ${payload.accountNo}`, 'emerald');
+                withdrawForm.reset();
+                getLiveMerchantBalance(); // Perbarui tampilan sisa saldo otomatis
+            } else {
+                alert("Withdraw Gagal: " + data.message);
+                pushNotification('WD_FAILED', `Gagal mengirim dana: ${data.message}`, 'rose');
+            }
+        } catch (err) {
+            alert("Gagal memproses request withdraw ke API.");
+        } finally {
+            btnWdSubmit.disabled = false;
+            btnWdSubmit.innerText = 'Proses Penarikan Dana Berjalan';
+        }
+    });
+</script>
 </body>
 </html>
