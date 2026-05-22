@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rayanxweb- Top Up E-Wallet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gopay: '#00AED6',
+                            ovo: '#4C2A86',
+                            dana: '#108EE9'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <div class="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 shadow-2xl shadow-slate-950/50">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 mb-3 border border-indigo-500/20 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75" />
+                </svg>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">AJM Control Panel</h1>
+            <p class="text-xs text-slate-400 mt-1">Gerbang Pembayaran Instan Direct E-Wallet</p>
+        </div>
+
+        <form id="topupForm" class="space-y-5">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">User ID (Firebase UID)</label>
+                <input type="text" id="userId" value="user_demo_123" required
+                    class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Pilih E-Wallet</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <label class="relative flex flex-col items-center justify-center p-3 bg-slate-950/40 border border-slate-800 rounded-xl cursor-pointer hover:bg-slate-950/80 transition group">
+                        <input type="radio" name="walletType" value="GOPAY" checked class="sr-only peer">
+                        <span class="absolute inset-0 border border-indigo-500 rounded-xl opacity-0 peer-checked:opacity-100 transition"></span>
+                        <span class="text-sm font-bold text-slate-400 peer-checked:text-brand-gopay group-hover:scale-105 transition">GoPay</span>
+                    </label>
+
+                    <label class="relative flex flex-col items-center justify-center p-3 bg-slate-950/40 border border-slate-800 rounded-xl cursor-pointer hover:bg-slate-950/80 transition group">
+                        <input type="radio" name="walletType" value="OVO" class="sr-only peer">
+                        <span class="absolute inset-0 border border-indigo-500 rounded-xl opacity-0 peer-checked:opacity-100 transition"></span>
+                        <span class="text-sm font-bold text-slate-400 peer-checked:text-brand-ovo group-hover:scale-105 transition">OVO</span>
+                    </label>
+
+                    <label class="relative flex flex-col items-center justify-center p-3 bg-slate-950/40 border border-slate-800 rounded-xl cursor-pointer hover:bg-slate-950/80 transition group">
+                        <input type="radio" name="walletType" value="DANA" class="sr-only peer">
+                        <span class="absolute inset-0 border border-indigo-500 rounded-xl opacity-0 peer-checked:opacity-100 transition"></span>
+                        <span class="text-sm font-bold text-slate-400 peer-checked:text-brand-dana group-hover:scale-105 transition">DANA</span>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nomor Telepon</label>
+                <input type="tel" id="phoneNumber" placeholder="Contoh: 0821xxxxxxxx" required
+                    class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200">
+                <p id="ovoNote" class="text-[11px] text-amber-400/80 mt-1.5 hidden">💡 Khusus OVO, pastikan aplikasi OVO aktif di HP Anda untuk menerima Push Notif PIN.</p>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nominal Top Up (Rp)</label>
+                <input type="number" id="amount" placeholder="Minimal 10000" min="10000" required
+                    class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-sm font-mono text-indigo-300 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition duration-200">
+            </div>
+
+            <button type="submit" id="btnSubmit"
+                class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition duration-150">
+                Bayar Sekarang
+            </button>
+        </form>
+
+        <div id="resultArea" class="mt-6 p-4 rounded-xl border hidden bg-slate-950/50 text-xs">
+            <p id="resultMessage" class="font-medium mb-2"></p>
+            <a id="actionLink" href="#" target="_blank" 
+               class="inline-flex items-center justify-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-md transition hidden">
+               Buka Tautan Pembayaran &rarr;
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('topupForm');
+        const ovoNote = document.getElementById('ovoNote');
+        const resultArea = document.getElementById('resultArea');
+        const resultMessage = document.getElementById('resultMessage');
+        const actionLink = document.getElementById('actionLink');
+        const btnSubmit = document.getElementById('btnSubmit');
+
+        // Deteksi perubahan pilihan e-wallet untuk memunculkan catatan khusus OVO
+        document.querySelectorAll('input[name="walletType"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.value === 'OVO') {
+                    ovoNote.classList.remove('hidden');
+                } else {
+                    ovoNote.classList.add('hidden');
+                }
+            });
+        });
+
+        // Tangani submit form ke API Vercel
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Atur loading state
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = 'Memproses ke Midtrans...';
+            resultArea.classList.add('hidden');
+            actionLink.classList.add('hidden');
+
+            const payload = {
+                userId: document.getElementById('userId').value,
+                walletType: document.querySelector('input[name="walletType"]:checked').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                amount: document.getElementById('amount').value,
+                userEmail: "customer@rayanxweb.com" // Default fallback email
+            };
+
+            try {
+                // Hit endpoint API serverless topup yang telah kita buat sebelumnya
+                const response = await fetch('/api/transactions/topup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                resultArea.classList.remove('hidden');
+                if (data.success) {
+                    resultArea.className = "mt-6 p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-xs";
+                    resultMessage.innerText = data.message;
+
+                    // Jika ada action URL (Gopay Deeplink atau DANA Redirect)
+                    if (data.payment && data.payment.actionUrl) {
+                        actionLink.href = data.payment.actionUrl;
+                        actionLink.classList.remove('hidden');
+                        actionLink.innerText = data.payment.actionType === 'deeplink' ? 'Buka Aplikasi Gojek' : 'Selesaikan di Web DANA';
+                    }
+                } else {
+                    resultArea.className = "mt-6 p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-xs";
+                    resultMessage.innerText = "Error: " + data.message;
+                }
+            } catch (err) {
+                resultArea.classList.remove('hidden');
+                resultArea.className = "mt-6 p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-xs";
+                resultMessage.innerText = "Gagal terhubung ke server API.";
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Bayar Sekarang';
+            }
+        });
+    </script>
+</body>
+</html>
