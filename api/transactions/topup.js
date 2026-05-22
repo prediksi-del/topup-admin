@@ -1,9 +1,8 @@
-const connectDB = require('../../config/db');
-const Transaction = require('../../src/models/Transaction');
-const midtransService = require('../../src/services/midtrans.service');
+import connectDB from '../../config/db.js';
+import Transaction from '../../src/models/Transaction.js';
+import midtransService from '../../src/services/midtrans.service.js';
 
-// Ganti dari "export default async function" menjadi "module.exports ="
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
@@ -73,4 +72,4 @@ module.exports = async (req, res) => {
         console.error('Topup Serverless Error:', error);
         return res.status(500).json({ success: false, message: error.message });
     }
-};
+}
