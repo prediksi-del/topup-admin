@@ -1,4 +1,4 @@
-const coreApi = require('../../config/midtrans');
+import coreApi from '../../config/midtrans.js';
 
 class MidtransService {
     async chargeEwallet({ orderId, amount, walletType, phoneNumber }) {
@@ -36,4 +36,4 @@ class MidtransService {
     }
 }
 
-module.exports = new MidtransService();
+export default new MidtransService();
